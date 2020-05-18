@@ -1,6 +1,8 @@
 package ru.polardl.homeshopping.Models;
 
-public class Client {
+import java.io.Serializable;
+
+public class Client implements Serializable {
 
     private String clientName;
     private String address;

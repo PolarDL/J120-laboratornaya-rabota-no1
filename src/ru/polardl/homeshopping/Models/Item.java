@@ -1,48 +1,38 @@
 package ru.polardl.homeshopping.Models;
 
-import javax.crypto.spec.PSource;
+import java.io.Serializable;
 
-public class Item {
+public class Item implements Serializable {                 //should it be Serializable? To be checked
 
-    private int id;
+    private long id;
     private String itemName;
     private String color;           //not obligatory to fill in
-    private long priceInCents;
+    private double price;
     private int leftover;
 
-    public Item(int id, String itemName, long priceInCents, int leftover) throws Exception {
+    public Item(long id, String itemName, String color, double price, int leftover) throws Exception {
         this.id = id;
         this.itemName = itemName;
 
-//        if (priceInCents <= 0) {
-//            throw new IllegalArgumentException("Price should be more than 0");
-//        }
-//        this.priceInCents = priceInCents;
+        if (!color.equals("")) {
+            this.color = color;
+        } else {
+            this.color = "n/a";
+        }
 
-        if (priceInCents <= 0) {
+        if (price <= 0) {
             throw new Exception("Price should be more than 0");             //think of a better exception class to throw
         }
-        this.priceInCents = priceInCents;
-
-//        if (leftover < 0) {
-//            throw new IllegalArgumentException("Leftover can't be less than 0");
-//        }
-//        this.leftover = leftover;
+        this.price = price;
 
         if (leftover < 0) {
             throw new Exception("Leftover can't be less than 0");           //think of a better exception class to throw
         }
         this.leftover = leftover;
 
-        this.color = "n/a";
     }
 
-    public Item(int id, String itemName, long priceInCents, int leftover, String color) throws Exception {
-        this(id, itemName, priceInCents, leftover);
-        this.color = color;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -54,8 +44,8 @@ public class Item {
         return color;
     }
 
-    public long getPriceInCents() {
-        return priceInCents;
+    public double getPrice() {
+        return price;
     }
 
     public int getLeftover() {
@@ -64,14 +54,13 @@ public class Item {
 
     //do I need setters for Item?
 
-
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
                 ", itemName='" + itemName + '\'' +
                 ", color='" + color + '\'' +
-                ", priceInCents=" + priceInCents +
+                ", price=" + price +
                 ", leftover=" + leftover +
                 '}';
     }
@@ -88,6 +77,6 @@ public class Item {
 
     @Override
     public int hashCode() {
-        return id;
+        return (int) (id ^ (id >>> 32));
     }
 }

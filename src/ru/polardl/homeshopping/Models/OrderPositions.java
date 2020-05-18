@@ -1,46 +1,53 @@
 package ru.polardl.homeshopping.Models;
 
-import java.util.Objects;
+import java.io.Serializable;
 
-public class OrderPositions {
+public class OrderPositions implements Serializable {
 
-    private Item item;
-    private int itemQuantity;
-    private long itemFixedPrice;
+    private Item orderPosItem;
+    private int orderPosItemQuantity;
+    private double orderPosItemFixedPrice;
+    private double orderPosTotalPrice;
 
-    public OrderPositions(Item item, int itemQuantity, long itemFixedPrice) throws Exception {
-        this.item = item;
+    public OrderPositions(Item orderPosItem, int orderPosItemQuantity, double orderPosItemFixedPrice) throws Exception {
+        this.orderPosItem = orderPosItem;
 
-        if (itemQuantity <= 0) {
+        if (orderPosItemQuantity <= 0) {
             throw new Exception("Quantity of items should be more than 0");             //think of a better exception class to throw
         }
-        this.itemQuantity = itemQuantity;
 
-        this.itemFixedPrice = itemFixedPrice;
+        this.orderPosItemQuantity = orderPosItemQuantity;
+        this.orderPosItemFixedPrice = orderPosItemFixedPrice;
+        this.orderPosTotalPrice = orderPosItemQuantity * orderPosItemFixedPrice;
     }
 
-    public Item getItem() {
-        return item;
+    public Item getOrderPosItem() {
+        return orderPosItem;
     }
 
-    public int getItemQuantity() {
-        return itemQuantity;
+    public int getOrderPosItemQuantity() {
+        return orderPosItemQuantity;
     }
 
-    public long getItemFixedPrice() {
-        return itemFixedPrice;
+    public double getOrderPosItemFixedPrice() {
+        return orderPosItemFixedPrice;
     }
 
-    public void setItemQuantity(int itemQuantity) {
-        this.itemQuantity = itemQuantity;
+    public double getOrderPosTotalPrice() {
+        return orderPosTotalPrice;
+    }
+
+    public void setOrderPosItemQuantity(int orderPosItemQuantity) {
+        this.orderPosItemQuantity = orderPosItemQuantity;
     }
 
     @Override
     public String toString() {
         return "OrderPositions{" +
-                "item=" + item +
-                ", itemQuantity=" + itemQuantity +
-                ", itemFixedPrice=" + itemFixedPrice +
+                "orderPosItem=" + orderPosItem +
+                ", orderPosItemQuantity=" + orderPosItemQuantity +
+                ", orderPosItemFixedPrice=" + orderPosItemFixedPrice +
+                ", orderPosTotalPrice=" + orderPosTotalPrice +
                 '}';
     }
 
@@ -51,11 +58,11 @@ public class OrderPositions {
 
         OrderPositions that = (OrderPositions) o;
 
-        return item != null ? item.equals(that.item) : that.item == null;
+        return orderPosItem != null ? orderPosItem.equals(that.orderPosItem) : that.orderPosItem == null;
     }
 
     @Override
     public int hashCode() {
-        return item != null ? item.hashCode() : 0;
+        return orderPosItem != null ? orderPosItem.hashCode() : 0;
     }
 }

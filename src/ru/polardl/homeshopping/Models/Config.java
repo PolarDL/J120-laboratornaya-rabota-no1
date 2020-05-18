@@ -4,13 +4,12 @@ import ru.polardl.homeshopping.IO.ConfigIO;
 
 import java.util.Properties;
 
-public class Config {
+public class Config {       //to be deleted as an excessive class?
+
     private Properties configProperties;
-    private int maxDiscount;        //is it needed?
-    private String filePath;        //is it needed?
 
     public Config() {
-        configProperties = ConfigIO.readConfig();
+        configProperties = ConfigIO.getConfigIO();
     }
 
     public Properties getConfigProperties() {
