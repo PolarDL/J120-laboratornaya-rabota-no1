@@ -1,13 +1,10 @@
 package ru.polardl.homeshopping.IO;
 
+import ru.polardl.homeshopping.Models.Config;
 import ru.polardl.homeshopping.Models.Item;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class ItemIO {
@@ -19,14 +16,14 @@ public class ItemIO {
         Scanner scanner;
         int index = 0;
 
-        try (FileReader fileReader = new FileReader(ConfigIO.getConfigIO().getProperty("dataDirectory",
-                "") + "PriceList.csv");
+        try (FileReader fileReader = new FileReader( Config.getConfigProperties().getProperty("dataDirectory",
+                     "") + "PriceList.csv");
              BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             while ((line = bufferedReader.readLine()) != null) {
                 scanner = new Scanner(line);
                 scanner.useDelimiter(";");
 
-                int id = 0;
+                long id = 0;
                 String itemName = null;
                 double price = 0;
                 int leftover = 0;
@@ -35,7 +32,7 @@ public class ItemIO {
                 while (scanner.hasNext()) {
                     String data = scanner.next();
                     if (index == 0) {
-                        id = Integer.parseInt(data);
+                        id = Long.parseLong(data);
                     } else if (index == 1) {
                         itemName = data;
                     } else if (index == 2) {
@@ -55,7 +52,6 @@ public class ItemIO {
                     System.out.println(e.getMessage());
                 }
 
-
                 assert item != null;
                 itemMap.put(item.getId(), item);
 
@@ -65,5 +61,32 @@ public class ItemIO {
             System.out.println("File with prices of items is not found! Check file name and/or file path.");
         }
         return itemMap;
+    }
+
+    public static void setItemIO(HashMap<Long, Item> itemListMap) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (HashMap.Entry<Long, Item> entry : itemListMap.entrySet()) {
+            stringBuilder.append(entry.getValue().getId());
+            stringBuilder.append(";");
+            stringBuilder.append(entry.getValue().getItemName());
+            stringBuilder.append(";");
+            if (!entry.getValue().getColor().equals("n/a")) {
+                stringBuilder.append(entry.getValue().getColor());
+            }
+            stringBuilder.append(";");
+            stringBuilder.append(entry.getValue().getPrice());
+            stringBuilder.append(";");
+            stringBuilder.append(entry.getValue().getLeftover());
+            stringBuilder.append("\n");
+        }
+
+        try (FileWriter fileWriter = new FileWriter("PriceList.csv");
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            bufferedWriter.write(stringBuilder.toString());
+        } catch (IOException e) {
+            System.out.println("Failed to write Price List to a file");
+            e.printStackTrace();
+        }
     }
 }

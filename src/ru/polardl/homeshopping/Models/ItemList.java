@@ -2,19 +2,30 @@ package ru.polardl.homeshopping.Models;
 
 import ru.polardl.homeshopping.IO.ItemIO;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ItemList {
 
-    private HashMap<Long, Item> itemListMap;
+    private static ItemList instance;
+    private static HashMap<Long, Item> itemListMap;
 
-    public ItemList() {
-        this.itemListMap = ItemIO.getItemIO();
+    private ItemList() {
+        itemListMap = ItemIO.getItemIO();
     }
 
-    public HashMap<Long, Item> getItemListMap() {
+    public static HashMap<Long, Item> getItemListMap() {
+        if (instance == null) {
+            instance = new ItemList();
+            return itemListMap;
+        }
         return itemListMap;
+    }
+
+    public static void putItemInItemListMap(Item item) {
+        if (instance == null) {
+            instance = new ItemList();
+            itemListMap.put(item.getId(), item);
+        }
+        itemListMap.put(item.getId(), item);
     }
 }

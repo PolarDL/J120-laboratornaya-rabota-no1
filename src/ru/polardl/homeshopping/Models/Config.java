@@ -4,15 +4,20 @@ import ru.polardl.homeshopping.IO.ConfigIO;
 
 import java.util.Properties;
 
-public class Config {       //to be deleted as an excessive class?
+public class Config {
 
-    private Properties configProperties;
+    private static Config instance;
+    private static Properties configProperties;
 
-    public Config() {
+    private Config() {
         configProperties = ConfigIO.getConfigIO();
     }
 
-    public Properties getConfigProperties() {
+    public static Properties getConfigProperties() {
+        if (instance == null) {
+            instance = new Config();
+            return configProperties;
+        }
         return configProperties;
     }
 }

@@ -2,7 +2,7 @@ package ru.polardl.homeshopping.Models;
 
 import java.io.Serializable;
 
-public class Item implements Serializable {                 //should it be Serializable? To be checked
+public class Item implements Serializable {
 
     private long id;
     private String itemName;
@@ -52,7 +52,13 @@ public class Item implements Serializable {                 //should it be Seria
         return leftover;
     }
 
-    //do I need setters for Item?
+    public void setLeftover(int leftover) {
+        if (leftover >= 0) {
+            this.leftover = leftover;
+        } else {
+            System.out.println("Leftover can't be less than zero");
+        }
+    }
 
     @Override
     public String toString() {
