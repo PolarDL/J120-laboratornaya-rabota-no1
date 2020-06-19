@@ -6,6 +6,16 @@ import ru.polardl.homeshopping.Models.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import ru.polardl.homeshopping.GUI.MainForm;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static java.util.stream.Collectors.*;
+import static java.util.Map.Entry.*;
 
 public class Application {
 
@@ -16,10 +26,16 @@ public class Application {
 //        }
 //        System.out.println();
 
+//        Properties defaultProperties = Config.getConfigProperties();
 
-        OrderList orderList = new OrderList();
-        System.out.println(orderList);
+//        HashMap<Long, Item> itemListMap = ItemList.getItemListMap();
 
+//        OrderList orderList = new OrderList();
+//        System.out.println(orderList);
+
+        MainForm mainForm = new MainForm();
+        mainForm.setVisible(true);
+        
 
 
 

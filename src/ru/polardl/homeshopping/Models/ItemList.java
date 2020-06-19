@@ -14,11 +14,12 @@ public class ItemList {
     }
 
     public static HashMap<Long, Item> getItemListMap() {
+        HashMap<Long, Item> bufHashMap = null;
         if (instance == null) {
             instance = new ItemList();
-            return itemListMap;
         }
-        return itemListMap;
+        bufHashMap = itemListMap;
+        return bufHashMap;
     }
 
     public static void putItemInItemListMap(Item item) {
