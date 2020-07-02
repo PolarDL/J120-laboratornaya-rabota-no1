@@ -7,13 +7,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import ru.polardl.homeshopping.Models.Item;
 import ru.polardl.homeshopping.Models.Order;
 import ru.polardl.homeshopping.Models.OrderList;
 import ru.polardl.homeshopping.Models.OrderPosition;
+import ru.polardl.homeshopping.Models.OrderState;
 
 public class DetailsOfOrderForm extends javax.swing.JFrame {
 
-    private final DefaultTableModel model;
+    private final DefaultTableModel modelInOrder;
+//    private final DefaultTableModel modelPriceList; 
+    
+    private final int orderID = ShowOrdersForm.orderIDSelected;
+    
+    private OrderList orderList = MainForm.orderList;
     
     /**
      * Creates new form DetailesOfOrderForm
@@ -24,20 +31,22 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        model = (DefaultTableModel) table.getModel();
+        modelInOrder = (DefaultTableModel) tableItemsInOrder.getModel();
+//        modelPriceList = (DefaultTableModel) tablePriceList.getModel();
         
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
         
-        table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
-        table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
-        table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+        tableItemsInOrder.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+        tableItemsInOrder.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+        tableItemsInOrder.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        tableItemsInOrder.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
         
+//        tablePriceList.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+//        tablePriceList.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
         
-        int orderID = ShowOrdersForm.orderIDSelected;
         
         
         OrderList orderList = MainForm.orderList;
@@ -68,9 +77,26 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
             String quantity = String.valueOf(orderPosition.getOrderPosItemQuantity());
             String totalPrice = String.valueOf(orderPosition.getOrderPosTotalPrice());
             
-            model.insertRow(model.getRowCount(), new Object[] {itemID, name, color, price, quantity, totalPrice});
-            
+            modelInOrder.insertRow(modelInOrder.getRowCount(), new Object[] {itemID, name, color, price, quantity, totalPrice});  
         }
+        
+        
+//        HashMap<Long, Item> initialPriceList = MainForm.itemListMap;
+//        TreeMap<Long, Item> sortedPriceList = new TreeMap<>();
+//        sortedPriceList.putAll(initialPriceList);
+//        
+//        for (Map.Entry<Long, Item> entry : sortedPriceList.entrySet()) {
+//            Item item = entry.getValue();
+//            String itemID = String.valueOf(entry.getKey());
+//            String name = item.getItemName();
+//            String color = item.getColor();
+//            String price = String.valueOf(item.getPrice());
+//            String leftover = String.valueOf(item.getLeftover());
+//            
+//            modelPriceList.insertRow(modelPriceList.getRowCount(), new Object[] {itemID, name, color, price, leftover});
+//        }
+        
+        
         
     }
 
@@ -84,7 +110,7 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        orderID = new javax.swing.JLabel();
+        orderIDLable = new javax.swing.JLabel();
         orderIDOutput = new javax.swing.JTextField();
         orderDate = new javax.swing.JLabel();
         orderDateOutput = new javax.swing.JTextField();
@@ -96,18 +122,20 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
         phone = new javax.swing.JLabel();
         phoneOut = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        tableItemsInOrder = new javax.swing.JTable();
         orderTotalPrice = new javax.swing.JLabel();
         orderTotalPriceOut = new javax.swing.JTextField();
         discount = new javax.swing.JLabel();
         discountOut = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         orderStateOutput = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        changeOrderBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        orderID.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        orderID.setText("Order ID");
+        orderIDLable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        orderIDLable.setText("Order ID");
 
         orderIDOutput.setEditable(false);
         orderIDOutput.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -146,7 +174,7 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
         phoneOut.setEditable(false);
         phoneOut.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-        table.setModel(new javax.swing.table.DefaultTableModel(
+        tableItemsInOrder.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -162,16 +190,16 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(table);
-        if (table.getColumnModel().getColumnCount() > 0) {
-            table.getColumnModel().getColumn(0).setMinWidth(110);
-            table.getColumnModel().getColumn(0).setMaxWidth(110);
-            table.getColumnModel().getColumn(1).setPreferredWidth(150);
-            table.getColumnModel().getColumn(4).setMaxWidth(65);
+        jScrollPane1.setViewportView(tableItemsInOrder);
+        if (tableItemsInOrder.getColumnModel().getColumnCount() > 0) {
+            tableItemsInOrder.getColumnModel().getColumn(0).setMinWidth(110);
+            tableItemsInOrder.getColumnModel().getColumn(0).setMaxWidth(110);
+            tableItemsInOrder.getColumnModel().getColumn(1).setPreferredWidth(150);
+            tableItemsInOrder.getColumnModel().getColumn(4).setMaxWidth(65);
         }
 
         orderTotalPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        orderTotalPrice.setText("Order Total Discount Price");
+        orderTotalPrice.setText("Order Total Discounted Price");
 
         orderTotalPriceOut.setEditable(false);
         orderTotalPriceOut.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -190,16 +218,27 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
         orderStateOutput.setEditable(false);
         orderStateOutput.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setText("To change this Order press:");
+
+        changeOrderBtn.setText("Change");
+        changeOrderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeOrderBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(51, 51, 51)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(orderID)
+                            .addComponent(orderIDLable)
                             .addComponent(orderDate))
                         .addGap(51, 51, 51)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -207,15 +246,17 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
                             .addComponent(orderDateOutput))
                         .addGap(50, 50, 50)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(discount)
-                            .addComponent(jLabel1))
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(discount)))
                         .addGap(47, 47, 47)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(discountOut, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
                             .addComponent(orderStateOutput)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(client)
-                        .addGap(64, 64, 64)
+                        .addGap(42, 42, 42)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,30 +264,34 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
                                     .addComponent(phone))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(addressOut, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                                    .addComponent(phoneOut)))
+                                    .addComponent(addressOut)
+                                    .addComponent(phoneOut, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(name)
                                 .addGap(38, 38, 38)
-                                .addComponent(nameOut, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(157, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(nameOut, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                        .addComponent(orderTotalPrice)
+                        .addGap(18, 18, 18)
+                        .addComponent(orderTotalPriceOut, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(orderTotalPrice)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(orderTotalPriceOut, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(changeOrderBtn)
+                .addGap(21, 21, 21))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(48, 48, 48)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(discount)
                         .addComponent(discountOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(orderID)
+                        .addComponent(orderIDLable)
                         .addComponent(orderIDOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -254,7 +299,7 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
                     .addComponent(orderDateOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(orderStateOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(client)
                     .addComponent(name)
@@ -266,23 +311,23 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(phone)
-                    .addComponent(phoneOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(phoneOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orderTotalPriceOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orderTotalPrice))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(orderTotalPrice)
-                    .addComponent(orderTotalPriceOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2)
+                    .addComponent(changeOrderBtn))
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,6 +342,20 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
     private void orderIDOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderIDOutputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_orderIDOutputActionPerformed
+
+    private void changeOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeOrderBtnActionPerformed
+        // TODO add your handling code here:
+
+        if (orderList.getOrderListMap().get(orderID).getOrderState().equals(OrderState.INPROGRESS)) {
+            new ChangeOrderForm().setVisible(true);
+            dispose();
+
+        } else {
+            WrongInputForm.wrongInputMassage = "Forbidden to change the Order with state not \"In progress\"";
+            new WrongInputForm().setVisible(true);
+        }
+
+    }//GEN-LAST:event_changeOrderBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -337,23 +396,25 @@ public class DetailsOfOrderForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
     private javax.swing.JTextField addressOut;
+    private javax.swing.JButton changeOrderBtn;
     private javax.swing.JLabel client;
     private javax.swing.JLabel discount;
     private javax.swing.JTextField discountOut;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel name;
     private javax.swing.JTextField nameOut;
     private javax.swing.JLabel orderDate;
     private javax.swing.JTextField orderDateOutput;
-    private javax.swing.JLabel orderID;
+    private javax.swing.JLabel orderIDLable;
     private javax.swing.JTextField orderIDOutput;
     private javax.swing.JTextField orderStateOutput;
     private javax.swing.JLabel orderTotalPrice;
     private javax.swing.JTextField orderTotalPriceOut;
     private javax.swing.JLabel phone;
     private javax.swing.JTextField phoneOut;
-    private javax.swing.JTable table;
+    private javax.swing.JTable tableItemsInOrder;
     // End of variables declaration//GEN-END:variables
 }

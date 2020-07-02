@@ -40,7 +40,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="orderScrollPane1" alignment="0" pref="689" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="189" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="153" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="showDetailedInfo" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -48,7 +48,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="showDetailedInfoBtn" max="32767" attributes="0"/>
-                      <Component id="changeOrderBtn" pref="75" max="32767" attributes="0"/>
+                      <Component id="changeOrderBtn" min="-2" pref="75" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -58,7 +58,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="orderScrollPane1" min="-2" pref="246" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                  <EmptySpace pref="36" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="showDetailedInfo" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="showDetailedInfoBtn" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -68,7 +68,7 @@
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="changeOrderBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -139,7 +139,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Show detailed info about selected Order"/>
+            <Property name="text" type="java.lang.String" value="To show detailed info about selected Order press:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="showDetailedInfoBtn">
@@ -158,7 +158,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Change selected Order"/>
+            <Property name="text" type="java.lang.String" value="To change selected Order press:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="changeOrderBtn">

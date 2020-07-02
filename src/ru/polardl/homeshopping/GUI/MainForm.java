@@ -40,13 +40,9 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         createNewOrder = new javax.swing.JLabel();
-        changeOrder = new javax.swing.JLabel();
-        numberOfOrderToChangeInput = new javax.swing.JTextField();
-        changeOrderPress = new javax.swing.JLabel();
         showPriceList = new javax.swing.JLabel();
         showListOfOrders = new javax.swing.JLabel();
         createNewOrderBtn = new javax.swing.JButton();
-        changeOrderBtn = new javax.swing.JButton();
         showPriceListBtn = new javax.swing.JButton();
         showListOfOrdersBtn = new javax.swing.JButton();
 
@@ -54,12 +50,6 @@ public class MainForm extends javax.swing.JFrame {
 
         createNewOrder.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         createNewOrder.setText("To create new Order press:");
-
-        changeOrder.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        changeOrder.setText("To change Order #");
-
-        changeOrderPress.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        changeOrderPress.setText("press:");
 
         showPriceList.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         showPriceList.setText("To show Price List press:");
@@ -73,14 +63,6 @@ public class MainForm extends javax.swing.JFrame {
         createNewOrderBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createNewOrderBtnActionPerformed(evt);
-            }
-        });
-
-        changeOrderBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        changeOrderBtn.setText("Change Order");
-        changeOrderBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changeOrderBtnActionPerformed(evt);
             }
         });
 
@@ -108,22 +90,15 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(77, 77, 77)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(changeOrder)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numberOfOrderToChangeInput, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(changeOrderPress))
                     .addComponent(showPriceList)
                     .addComponent(showListOfOrders)
                     .addComponent(createNewOrder))
-                .addGap(18, 18, 18)
+                .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(showListOfOrdersBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(showPriceListBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(changeOrderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(createNewOrderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,19 +109,13 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(createNewOrderBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(changeOrder)
-                    .addComponent(numberOfOrderToChangeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(changeOrderPress)
-                    .addComponent(changeOrderBtn))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(showPriceList)
                     .addComponent(showPriceListBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(showListOfOrders)
                     .addComponent(showListOfOrdersBtn))
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -180,46 +149,6 @@ public class MainForm extends javax.swing.JFrame {
         
         new CreateOrderForm().setVisible(true);
     }//GEN-LAST:event_createNewOrderBtnActionPerformed
-
-    private void changeOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeOrderBtnActionPerformed
-        // TODO add your handling code here:
-        
-        if(numberOfOrderToChangeInput.getText().length() != 0){
-            try {
-                orderIDToChange = Integer.parseInt(numberOfOrderToChangeInput.getText());
-                
-                if (orderIDToChange <= 0) {
-                    WrongInputForm.wrongInputMassage = "Order ID can't be 0 or less. Check input";
-                    new WrongInputForm().setVisible(true);
-                    
-                } else if(orderList.getOrderListMap().containsKey(orderIDToChange)) {
-
-                    if (orderList.getOrderListMap().get(orderIDToChange).getOrderState().equals(OrderState.INPROGRESS)) {
-                        
-                        new ChangeOrderForm().setVisible(true);
-                        numberOfOrderToChangeInput.setText("");
-                        
-                    } else {
-                        WrongInputForm.wrongInputMassage = "Forbidden to change the Order with state not \"In progress\"";
-                        new WrongInputForm().setVisible(true);
-                    }
-                    
-                } else {
-                    WrongInputForm.wrongInputMassage = "No Order with this ID in List of Orders. Check input";
-                    new WrongInputForm().setVisible(true);
-                }
-                
-            } catch (Exception e) {
-                WrongInputForm.wrongInputMassage = "Order ID must be an uninterrupted sequence of numbers. Check input";
-                new WrongInputForm().setVisible(true);  
-            }
-            
-        } else {
-            WrongInputForm.wrongInputMassage = "Order ID input field is emty. Check input";
-            new WrongInputForm().setVisible(true);
-        }    
-        
-    }//GEN-LAST:event_changeOrderBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -258,13 +187,9 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel changeOrder;
-    private javax.swing.JButton changeOrderBtn;
-    private javax.swing.JLabel changeOrderPress;
     private javax.swing.JLabel createNewOrder;
     private javax.swing.JButton createNewOrderBtn;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField numberOfOrderToChangeInput;
     private javax.swing.JLabel showListOfOrders;
     private javax.swing.JButton showListOfOrdersBtn;
     private javax.swing.JLabel showPriceList;

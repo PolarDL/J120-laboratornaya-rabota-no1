@@ -19,7 +19,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
     static int orderIDSelected;
     
     OrderList orderList = MainForm.orderList;
-    HashMap<Integer, Order> initialMap = orderList.getOrderListMap();
+    HashMap<Integer, Order> initialOrderMap = orderList.getOrderListMap();
 
     /**
      * Creates new form ShowOrdersForm
@@ -45,7 +45,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
 //        HashMap<Integer, Order> initial = orderList.getOrderListMap();
         
         TreeMap<Integer, Order> sorted = new TreeMap<>();
-        sorted.putAll(initialMap);
+        sorted.putAll(initialOrderMap);
         
         for (Map.Entry<Integer, Order> entry : sorted.entrySet()) {
             Order order = entry.getValue();
@@ -99,7 +99,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
         orderScrollPane1.setViewportView(table);
 
         showDetailedInfo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        showDetailedInfo.setText("Show detailed info about selected Order");
+        showDetailedInfo.setText("To show detailed info about selected Order press:");
 
         showDetailedInfoBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         showDetailedInfoBtn.setText("Show");
@@ -110,7 +110,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel1.setText("Change selected Order");
+        jLabel1.setText("To change selected Order press:");
 
         changeOrderBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         changeOrderBtn.setText("Change");
@@ -126,21 +126,21 @@ public class ShowOrdersForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(orderScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(189, 189, 189)
+                .addGap(153, 153, 153)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(showDetailedInfo)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(showDetailedInfoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(changeOrderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+                    .addComponent(changeOrderBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(orderScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(showDetailedInfo)
                     .addComponent(showDetailedInfoBtn))
@@ -148,7 +148,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(changeOrderBtn))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -168,6 +168,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
     private void showDetailedInfoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDetailedInfoBtnActionPerformed
         // TODO add your handling code here:
         
+//<editor-fold defaultstate="collapsed" desc="comment">
 //        try {
 //            orderIDForDetailes = Integer.parseInt(orderIDForDetailesInput.getText());
 //            if (orderIDForDetailes <= 0) {
@@ -186,40 +187,45 @@ public class ShowOrdersForm extends javax.swing.JFrame {
 //            new WrongInputForm().setVisible(true);
 ////            System.out.println("Order ID is Integer. Check input");
 //        }
-        
+//</editor-fold>
 
         if (table.getSelectionModel().isSelectionEmpty()) {
+            WrongInputForm.wrongInputMassage = "No Order is selected. Select Order";
+            new WrongInputForm().setVisible(true);
             
         } else {
             int row = table.getSelectedRow();
             int column = 0;
             orderIDSelected = Integer.parseInt((String) table.getValueAt(row, column));
             new DetailsOfOrderForm().setVisible(true);
+            dispose();
         }
-        
-        
     }//GEN-LAST:event_showDetailedInfoBtnActionPerformed
 
     private void changeOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeOrderBtnActionPerformed
         // TODO add your handling code here:
         
         if (table.getSelectionModel().isSelectionEmpty()) {
+            WrongInputForm.wrongInputMassage = "No Order is selected. Select Order";
+            new WrongInputForm().setVisible(true);
 
         } else {
             int row = table.getSelectedRow();
             int column = 0;
             orderIDSelected = Integer.parseInt((String) table.getValueAt(row, column));
             
-            if (initialMap.get(orderIDSelected).getOrderState().equals(OrderState.INPROGRESS)) {
+            if (initialOrderMap.get(orderIDSelected).getOrderState().equals(OrderState.INPROGRESS)) {
                 
+//                dispose();
                 new ChangeOrderForm().setVisible(true);
+                dispose();
                 
             } else {
                 WrongInputForm.wrongInputMassage = "Forbidden to change the Order with state not \"In progress\"";
                 new WrongInputForm().setVisible(true);
             }
             
-            
+//<editor-fold defaultstate="collapsed" desc="comment">
 //                try {
 //                    orderIDToChange = Integer.parseInt(numberOfOrderToChangeInput.getText());
 //
@@ -247,7 +253,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
 //                    WrongInputForm.wrongInputMassage = "Order ID must be an uninterrupted sequence of numbers. Check input";
 //                    new WrongInputForm().setVisible(true);
 //                }
-
+//</editor-fold>
 
         }
         

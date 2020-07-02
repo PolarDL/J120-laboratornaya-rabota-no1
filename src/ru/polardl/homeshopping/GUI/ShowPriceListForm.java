@@ -35,10 +35,8 @@ public class ShowPriceListForm extends javax.swing.JFrame {
         
         
         HashMap<Long, Item> initial = MainForm.itemListMap;
-        
         TreeMap<Long, Item> sorted = new TreeMap<>();
         sorted.putAll(initial);
-        
         
         for (Map.Entry<Long, Item> entry : sorted.entrySet()) {
             Item item = entry.getValue();

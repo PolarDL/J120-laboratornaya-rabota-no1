@@ -29,9 +29,6 @@ public class CreateOrderForm extends javax.swing.JFrame {
     
     static HashMap<Long, OrderPosition> orderPositionMap = new HashMap();
 
-    //creating new instance of Order List which is not cool
-//    private final OrderList orderList = new OrderList();
-//    private final HashMap<Integer, Order> initialMap = orderList.getOrderListMap();
 
     /**
      * Creates new form CreateOrderForm
@@ -54,10 +51,8 @@ public class CreateOrderForm extends javax.swing.JFrame {
         
         
         HashMap<Long, Item> initial = MainForm.itemListMap;
-        
         TreeMap<Long, Item> sorted = new TreeMap<>();
         sorted.putAll(initial);
-        
         
         for (Map.Entry<Long, Item> entry : sorted.entrySet()) {
             Item item = entry.getValue();
@@ -69,7 +64,6 @@ public class CreateOrderForm extends javax.swing.JFrame {
             
             model.insertRow(model.getRowCount(), new Object[] {itemID, name, color, price, leftover});
         }
-        
     }
 
     /**
@@ -89,7 +83,6 @@ public class CreateOrderForm extends javax.swing.JFrame {
         clientAddressInput = new javax.swing.JTextField();
         clientNameLB = new javax.swing.JLabel();
         clientAddress = new javax.swing.JLabel();
-        addItems = new javax.swing.JButton();
         clientNameInput = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         discountInput = new javax.swing.JTextField();
@@ -98,6 +91,7 @@ public class CreateOrderForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         quantityInput = new javax.swing.JTextField();
         newAddItemsBtn = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,14 +111,6 @@ public class CreateOrderForm extends javax.swing.JFrame {
         clientNameLB.setText("name:");
 
         clientAddress.setText("address:");
-
-        addItems.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        addItems.setText("Add Items to this Order");
-        addItems.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addItemsActionPerformed(evt);
-            }
-        });
 
         clientNameInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,6 +149,7 @@ public class CreateOrderForm extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("Quantity of selected in the table Item to be added to the Order:");
 
+        newAddItemsBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         newAddItemsBtn.setText("Add to the Order");
         newAddItemsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,43 +157,47 @@ public class CreateOrderForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setText("When finnished adding Items press:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(addItems, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(178, 178, 178)
-                        .addComponent(enterBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(22, 22, 22)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(clientAddress)
-                                        .addComponent(clientNameLB)
-                                        .addComponent(clientPhone)
-                                        .addComponent(jLabel1))
-                                    .addGap(28, 28, 28)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(clientNameInput)
-                                        .addComponent(clientAddressInput)
-                                        .addComponent(clientPhoneInput, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(discountInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(clientInfo)))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(31, 31, 31)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(quantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(newAddItemsBtn))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(clientAddress)
+                                    .addComponent(clientNameLB)
+                                    .addComponent(clientPhone)
+                                    .addComponent(jLabel1))
+                                .addGap(28, 28, 28)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(clientNameInput)
+                                    .addComponent(clientAddressInput)
+                                    .addComponent(clientPhoneInput, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(discountInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(clientInfo)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(quantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(newAddItemsBtn))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(301, 301, 301)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(enterBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,7 +230,7 @@ public class CreateOrderForm extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(enterBtn)
-                    .addComponent(addItems))
+                    .addComponent(jLabel3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -296,7 +287,6 @@ public class CreateOrderForm extends javax.swing.JFrame {
         }
         
         
-        
         if (discountInput.getText().length() != 0) {
             try {
                 discount = Integer.parseInt(discountInput.getText());
@@ -307,30 +297,20 @@ public class CreateOrderForm extends javax.swing.JFrame {
         }
         
         
-        
         Order order = null;
         if (client != null) {
             if (!orderPositionMap.isEmpty()) {
 
-                
                 order = new Order(LocalDate.now(), client, discount, orderPositionMap);
                 MainForm.orderList.addToOrderList(order);
                 dispose();
-                
 
             } else {
                 WrongInputForm.wrongInputMassage = "No Items were added. Add Items";
                 new WrongInputForm().setVisible(true);
             }
         }
-        
-        
     }//GEN-LAST:event_enterBtnActionPerformed
-
-    private void addItemsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemsActionPerformed
-        // TODO add your handling code here:
-        new AddItemsToNewOrderForm().setVisible(true);
-    }//GEN-LAST:event_addItemsActionPerformed
 
     private void newAddItemsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAddItemsBtnActionPerformed
         // TODO add your handling code here:
@@ -378,8 +358,8 @@ public class CreateOrderForm extends javax.swing.JFrame {
             try {
                 orderPosition = new OrderPosition(itemID, quantity);
             } catch (Exception ex) {
-                Logger.getLogger(CreateOrderForm.class.getName()).log(Level.SEVERE, null, ex);
-                WrongInputForm.wrongInputMassage = "Failed to add this Item ID" + itemID;
+//                Logger.getLogger(CreateOrderForm.class.getName()).log(Level.SEVERE, null, ex);
+                WrongInputForm.wrongInputMassage = "Leftover of Item ID " + itemID + " is not enough. Decrease Quantity of items";
                 new WrongInputForm().setVisible(true);
             }
         }
@@ -427,7 +407,6 @@ public class CreateOrderForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addItems;
     private javax.swing.JLabel clientAddress;
     private javax.swing.JTextField clientAddressInput;
     private javax.swing.JLabel clientInfo;
@@ -439,6 +418,7 @@ public class CreateOrderForm extends javax.swing.JFrame {
     private javax.swing.JButton enterBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton newAddItemsBtn;
