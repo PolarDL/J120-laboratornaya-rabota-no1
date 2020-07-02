@@ -27,9 +27,9 @@ public class Application {
 //        System.out.println();
 
 //        Properties defaultProperties = Config.getConfigProperties();
-
+//
 //        HashMap<Long, Item> itemListMap = ItemList.getItemListMap();
-
+//
 //        OrderList orderList = new OrderList();
 //        System.out.println(orderList);
 
@@ -118,7 +118,7 @@ public class Application {
 //        System.out.println();
 //        System.out.println(orderList);
 
-//        orderList.changeOrderState(1, OrderState.SHIPPED);
+//        orderList.changeOrderState(5, OrderState.SHIPPED);
 //        System.out.println();
 //        System.out.println(orderList);
 
@@ -147,6 +147,10 @@ public class Application {
 //        orderList.changeOrderPosItemQuantityInOrder(1, 100003L, 7);
 //        System.out.println();
 //        System.out.println(orderList);
+
+        
+//        orderList.addOrderPosToOrder(2, 32516028337752l, 6);
+//        System.out.println("\n" + orderList);
 
 
     }

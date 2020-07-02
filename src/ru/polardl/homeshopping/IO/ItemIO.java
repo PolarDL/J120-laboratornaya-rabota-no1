@@ -16,7 +16,7 @@ public class ItemIO {
         Scanner scanner;
         int index = 0;
 
-        try (FileReader fileReader = new FileReader( Config.getConfigProperties().getProperty("dataDirectory",
+        try (FileReader fileReader = new FileReader(Config.getConfigProperties().getProperty("dataDirectory",
                      "") + "PriceList.csv");
              BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             while ((line = bufferedReader.readLine()) != null) {
@@ -81,7 +81,9 @@ public class ItemIO {
             stringBuilder.append("\n");
         }
 
-        try (FileWriter fileWriter = new FileWriter("PriceList.csv");
+        try (FileWriter fileWriter = new FileWriter(Config.getConfigProperties().getProperty("dataDirectory",
+                     "") + "PriceList.csv");
+//        try (FileWriter fileWriter = new FileWriter("PriceList.csv");
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             bufferedWriter.write(stringBuilder.toString());
         } catch (IOException e) {

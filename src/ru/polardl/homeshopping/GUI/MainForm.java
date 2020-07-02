@@ -1,7 +1,21 @@
 package ru.polardl.homeshopping.GUI;
 
+import java.util.HashMap;
+import java.util.Properties;
+import ru.polardl.homeshopping.Models.Config;
+import ru.polardl.homeshopping.Models.Item;
+import ru.polardl.homeshopping.Models.ItemList;
+import ru.polardl.homeshopping.Models.OrderList;
+import ru.polardl.homeshopping.Models.OrderState;
+
 public class MainForm extends javax.swing.JFrame {
 
+        static Properties defaultProperties = Config.getConfigProperties();
+        static HashMap<Long, Item> itemListMap = ItemList.getItemListMap();
+        static OrderList orderList = new OrderList();
+        
+        static int orderIDToChange;
+    
     /**
      * Creates new form MainFrame
      */
@@ -9,6 +23,10 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         setTitle("Main Dialog");
         setLocationRelativeTo(null);
+        
+        
+        
+
     }
 
     /**
@@ -60,6 +78,11 @@ public class MainForm extends javax.swing.JFrame {
 
         changeOrderBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         changeOrderBtn.setText("Change Order");
+        changeOrderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeOrderBtnActionPerformed(evt);
+            }
+        });
 
         showPriceListBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         showPriceListBtn.setText("Show Price List");
@@ -157,6 +180,46 @@ public class MainForm extends javax.swing.JFrame {
         
         new CreateOrderForm().setVisible(true);
     }//GEN-LAST:event_createNewOrderBtnActionPerformed
+
+    private void changeOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeOrderBtnActionPerformed
+        // TODO add your handling code here:
+        
+        if(numberOfOrderToChangeInput.getText().length() != 0){
+            try {
+                orderIDToChange = Integer.parseInt(numberOfOrderToChangeInput.getText());
+                
+                if (orderIDToChange <= 0) {
+                    WrongInputForm.wrongInputMassage = "Order ID can't be 0 or less. Check input";
+                    new WrongInputForm().setVisible(true);
+                    
+                } else if(orderList.getOrderListMap().containsKey(orderIDToChange)) {
+
+                    if (orderList.getOrderListMap().get(orderIDToChange).getOrderState().equals(OrderState.INPROGRESS)) {
+                        
+                        new ChangeOrderForm().setVisible(true);
+                        numberOfOrderToChangeInput.setText("");
+                        
+                    } else {
+                        WrongInputForm.wrongInputMassage = "Forbidden to change the Order with state not \"In progress\"";
+                        new WrongInputForm().setVisible(true);
+                    }
+                    
+                } else {
+                    WrongInputForm.wrongInputMassage = "No Order with this ID in List of Orders. Check input";
+                    new WrongInputForm().setVisible(true);
+                }
+                
+            } catch (Exception e) {
+                WrongInputForm.wrongInputMassage = "Order ID must be an uninterrupted sequence of numbers. Check input";
+                new WrongInputForm().setVisible(true);  
+            }
+            
+        } else {
+            WrongInputForm.wrongInputMassage = "Order ID input field is emty. Check input";
+            new WrongInputForm().setVisible(true);
+        }    
+        
+    }//GEN-LAST:event_changeOrderBtnActionPerformed
 
     /**
      * @param args the command line arguments

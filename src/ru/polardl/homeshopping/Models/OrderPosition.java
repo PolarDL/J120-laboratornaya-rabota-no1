@@ -12,7 +12,7 @@ public class OrderPosition implements Serializable {
     public OrderPosition(long itemID, int orderPosItemQuantity) throws Exception {
 
         this.orderPosItem = ItemList.getItemListMap().get(itemID);
-
+        
         if (this.orderPosItem == null) {
             throw new Exception("There is no item with provided ID in Price List file");
         }

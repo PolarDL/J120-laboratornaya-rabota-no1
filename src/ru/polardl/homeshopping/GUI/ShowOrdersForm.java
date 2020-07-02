@@ -7,16 +7,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import static ru.polardl.homeshopping.GUI.MainForm.orderIDToChange;
+import static ru.polardl.homeshopping.GUI.MainForm.orderList;
 import ru.polardl.homeshopping.Models.Order;
 import ru.polardl.homeshopping.Models.OrderList;
+import ru.polardl.homeshopping.Models.OrderState;
 
 public class ShowOrdersForm extends javax.swing.JFrame {
     
     private final DefaultTableModel model;
-    static int orderIDForDetailes;
+    static int orderIDSelected;
     
-    //creating new instance of Order List which is not cool
-    OrderList orderList = new OrderList();
+    OrderList orderList = MainForm.orderList;
     HashMap<Integer, Order> initialMap = orderList.getOrderListMap();
 
     /**
@@ -33,7 +35,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
         
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
         
@@ -52,8 +54,9 @@ public class ShowOrdersForm extends javax.swing.JFrame {
             String client = String.valueOf(order.getClient().getClientName());
             String discount = String.valueOf(order.getDiscount());
             String price = String.valueOf(order.getOrderTotalPrice());
+            String state = String.valueOf(order.getOrderState());
             
-            model.insertRow(model.getRowCount(), new Object[] {orderID, date, client, discount, price});
+            model.insertRow(model.getRowCount(), new Object[] {orderID, date, client, discount, price, state});
             
         }
     }
@@ -71,8 +74,9 @@ public class ShowOrdersForm extends javax.swing.JFrame {
         orderScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         showDetailedInfo = new javax.swing.JLabel();
-        orderIDForDetailesInput = new javax.swing.JTextField();
         showDetailedInfoBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        changeOrderBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,11 +85,11 @@ public class ShowOrdersForm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order ID", "Date", "Client", "Discount", "Total Price"
+                "Order ID", "Date", "Client", "Discount", "Total Price", "State"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -95,9 +99,7 @@ public class ShowOrdersForm extends javax.swing.JFrame {
         orderScrollPane1.setViewportView(table);
 
         showDetailedInfo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        showDetailedInfo.setText("Show detailed info about Order ID");
-
-        orderIDForDetailesInput.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        showDetailedInfo.setText("Show detailed info about selected Order");
 
         showDetailedInfoBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         showDetailedInfoBtn.setText("Show");
@@ -107,30 +109,46 @@ public class ShowOrdersForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setText("Change selected Order");
+
+        changeOrderBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        changeOrderBtn.setText("Change");
+        changeOrderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeOrderBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(orderScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(128, 128, 128)
-                .addComponent(showDetailedInfo)
-                .addGap(42, 42, 42)
-                .addComponent(orderIDForDetailesInput, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(showDetailedInfoBtn)
+                .addGap(189, 189, 189)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(showDetailedInfo)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(showDetailedInfoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(changeOrderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(orderScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
+                .addGap(45, 45, 45)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(showDetailedInfo)
-                    .addComponent(orderIDForDetailesInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(showDetailedInfoBtn))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(changeOrderBtn))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -150,26 +168,90 @@ public class ShowOrdersForm extends javax.swing.JFrame {
     private void showDetailedInfoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDetailedInfoBtnActionPerformed
         // TODO add your handling code here:
         
-        try {
-            orderIDForDetailes = Integer.parseInt(orderIDForDetailesInput.getText());
-            if (orderIDForDetailes <= 0) {
-                WrongInputForm.wrongInputMassage = "Order ID can't be 0 or less. Check input";
-                new WrongInputForm().setVisible(true);
+//        try {
+//            orderIDForDetailes = Integer.parseInt(orderIDForDetailesInput.getText());
+//            if (orderIDForDetailes <= 0) {
+//                WrongInputForm.wrongInputMassage = "Order ID can't be 0 or less. Check input";
+//                new WrongInputForm().setVisible(true);
+//
+//            } else if (initialMap.containsKey(orderIDForDetailes)) {
+//                new DetailsOfOrderForm().setVisible(true);
+//                orderIDForDetailesInput.setText("");
+//            } else {
+//                WrongInputForm.wrongInputMassage = "No Order with this ID in List of Orders. Check input";
+//                new WrongInputForm().setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            WrongInputForm.wrongInputMassage = "Order ID must be an uninterrupted sequence of numbers. Check input";
+//            new WrongInputForm().setVisible(true);
+////            System.out.println("Order ID is Integer. Check input");
+//        }
+        
 
-//                System.out.println("Order ID can't be 0 or less");
-            } else if (initialMap.containsKey(orderIDForDetailes)) {
-                new DetailsOfOrderForm().setVisible(true);
+        if (table.getSelectionModel().isSelectionEmpty()) {
+            
+        } else {
+            int row = table.getSelectedRow();
+            int column = 0;
+            orderIDSelected = Integer.parseInt((String) table.getValueAt(row, column));
+            new DetailsOfOrderForm().setVisible(true);
+        }
+        
+        
+    }//GEN-LAST:event_showDetailedInfoBtnActionPerformed
+
+    private void changeOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeOrderBtnActionPerformed
+        // TODO add your handling code here:
+        
+        if (table.getSelectionModel().isSelectionEmpty()) {
+
+        } else {
+            int row = table.getSelectedRow();
+            int column = 0;
+            orderIDSelected = Integer.parseInt((String) table.getValueAt(row, column));
+            
+            if (initialMap.get(orderIDSelected).getOrderState().equals(OrderState.INPROGRESS)) {
+                
+                new ChangeOrderForm().setVisible(true);
+                
             } else {
-                WrongInputForm.wrongInputMassage = "No Order with this ID in List of Orders. Check input";
+                WrongInputForm.wrongInputMassage = "Forbidden to change the Order with state not \"In progress\"";
                 new WrongInputForm().setVisible(true);
             }
-        } catch (Exception e) {
-            WrongInputForm.wrongInputMassage = "Order ID must be an uninterrupted sequence of numbers. Check input";
-            new WrongInputForm().setVisible(true);
             
-//            System.out.println("Order ID is Integer. Check input");
-        }      
-    }//GEN-LAST:event_showDetailedInfoBtnActionPerformed
+            
+//                try {
+//                    orderIDToChange = Integer.parseInt(numberOfOrderToChangeInput.getText());
+//
+//                    if (orderIDToChange <= 0) {
+//                        WrongInputForm.wrongInputMassage = "Order ID can't be 0 or less. Check input";
+//                        new WrongInputForm().setVisible(true);
+//
+//                    } else if (orderList.getOrderListMap().containsKey(orderIDToChange)) {
+//
+//                        if (orderList.getOrderListMap().get(orderIDToChange).getOrderState().equals(OrderState.INPROGRESS)) {
+//
+//                            new ChangeOrderForm().setVisible(true);
+//
+//                        } else {
+//                            WrongInputForm.wrongInputMassage = "Forbidden to change the Order with state not \"In progress\"";
+//                            new WrongInputForm().setVisible(true);
+//                        }
+//
+//                    } else {
+//                        WrongInputForm.wrongInputMassage = "No Order with this ID in List of Orders. Check input";
+//                        new WrongInputForm().setVisible(true);
+//                    }
+//
+//                } catch (Exception e) {
+//                    WrongInputForm.wrongInputMassage = "Order ID must be an uninterrupted sequence of numbers. Check input";
+//                    new WrongInputForm().setVisible(true);
+//                }
+
+
+        }
+        
+    }//GEN-LAST:event_changeOrderBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,8 +289,9 @@ public class ShowOrdersForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton changeOrderBtn;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField orderIDForDetailesInput;
     private javax.swing.JScrollPane orderScrollPane1;
     private javax.swing.JLabel showDetailedInfo;
     private javax.swing.JButton showDetailedInfoBtn;

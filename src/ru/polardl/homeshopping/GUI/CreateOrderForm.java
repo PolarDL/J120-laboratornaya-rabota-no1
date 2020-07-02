@@ -2,11 +2,20 @@ package ru.polardl.homeshopping.GUI;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import ru.polardl.homeshopping.Models.Client;
+import ru.polardl.homeshopping.Models.Item;
 import ru.polardl.homeshopping.Models.Order;
 import ru.polardl.homeshopping.Models.OrderList;
 import ru.polardl.homeshopping.Models.OrderPosition;
+import static ru.polardl.homeshopping.GUI.ShowOrdersForm.orderIDSelected;
 
 public class CreateOrderForm extends javax.swing.JFrame {
     
@@ -16,11 +25,13 @@ public class CreateOrderForm extends javax.swing.JFrame {
     
     private int discount;
     
-//    static HashMap<Long, OrderPosition> orderPositionMap;
+    private final DefaultTableModel model;
+    
+    static HashMap<Long, OrderPosition> orderPositionMap = new HashMap();
 
     //creating new instance of Order List which is not cool
-    private final OrderList orderList = new OrderList();
-    private final HashMap<Integer, Order> initialMap = orderList.getOrderListMap();
+//    private final OrderList orderList = new OrderList();
+//    private final HashMap<Integer, Order> initialMap = orderList.getOrderListMap();
 
     /**
      * Creates new form CreateOrderForm
@@ -31,9 +42,33 @@ public class CreateOrderForm extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
  
-                
+        model = (DefaultTableModel) table.getModel();
+        
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+
+        table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
         
         
+        HashMap<Long, Item> initial = MainForm.itemListMap;
+        
+        TreeMap<Long, Item> sorted = new TreeMap<>();
+        sorted.putAll(initial);
+        
+        
+        for (Map.Entry<Long, Item> entry : sorted.entrySet()) {
+            Item item = entry.getValue();
+            String itemID = String.valueOf(entry.getKey());
+            String name = item.getItemName();
+            String color = item.getColor();
+            String price = String.valueOf(item.getPrice());
+            String leftover = String.valueOf(item.getLeftover());
+            
+            model.insertRow(model.getRowCount(), new Object[] {itemID, name, color, price, leftover});
+        }
         
     }
 
@@ -58,11 +93,16 @@ public class CreateOrderForm extends javax.swing.JFrame {
         clientNameInput = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         discountInput = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        quantityInput = new javax.swing.JTextField();
+        newAddItemsBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         enterBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        enterBtn.setText("Enter");
+        enterBtn.setText("Create");
         enterBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 enterBtnActionPerformed(evt);
@@ -95,34 +135,78 @@ public class CreateOrderForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Discount");
 
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Item ID", "Name", "Color", "Price", "Leftover"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(table);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setPreferredWidth(60);
+            table.getColumnModel().getColumn(1).setPreferredWidth(150);
+            table.getColumnModel().getColumn(2).setPreferredWidth(30);
+            table.getColumnModel().getColumn(3).setPreferredWidth(15);
+            table.getColumnModel().getColumn(4).setPreferredWidth(15);
+        }
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setText("Quantity of selected in the table Item to be added to the Order:");
+
+        newAddItemsBtn.setText("Add to the Order");
+        newAddItemsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newAddItemsBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(clientAddress)
-                                    .addComponent(clientNameLB)
-                                    .addComponent(clientPhone)
-                                    .addComponent(jLabel1))
-                                .addGap(28, 28, 28)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(clientNameInput)
-                                    .addComponent(clientAddressInput)
-                                    .addComponent(clientPhoneInput, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(discountInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(clientInfo)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(enterBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addItems, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(33, Short.MAX_VALUE))
+                        .addComponent(addItems, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(178, 178, 178)
+                        .addComponent(enterBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(22, 22, 22)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(clientAddress)
+                                        .addComponent(clientNameLB)
+                                        .addComponent(clientPhone)
+                                        .addComponent(jLabel1))
+                                    .addGap(28, 28, 28)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(clientNameInput)
+                                        .addComponent(clientAddressInput)
+                                        .addComponent(clientPhoneInput, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(discountInput, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(clientInfo)))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(31, 31, 31)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(quantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(newAddItemsBtn))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,22 +229,29 @@ public class CreateOrderForm extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(discountInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(addItems)
-                .addGap(18, 18, 18)
-                .addComponent(enterBtn)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(quantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newAddItemsBtn))
+                .addGap(40, 40, 40)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(enterBtn)
+                    .addComponent(addItems))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -219,9 +310,13 @@ public class CreateOrderForm extends javax.swing.JFrame {
         
         Order order = null;
         if (client != null) {
-            if (AddItemsToNewOrderForm.orderPositionMap != null) {
+            if (!orderPositionMap.isEmpty()) {
 
-                order = new Order(LocalDate.now(), client, discount, AddItemsToNewOrderForm.orderPositionMap);
+                
+                order = new Order(LocalDate.now(), client, discount, orderPositionMap);
+                MainForm.orderList.addToOrderList(order);
+                dispose();
+                
 
             } else {
                 WrongInputForm.wrongInputMassage = "No Items were added. Add Items";
@@ -230,20 +325,71 @@ public class CreateOrderForm extends javax.swing.JFrame {
         }
         
         
-        
-        
-        
-        
-        
-        
-        
-        
     }//GEN-LAST:event_enterBtnActionPerformed
 
     private void addItemsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemsActionPerformed
         // TODO add your handling code here:
         new AddItemsToNewOrderForm().setVisible(true);
     }//GEN-LAST:event_addItemsActionPerformed
+
+    private void newAddItemsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAddItemsBtnActionPerformed
+        // TODO add your handling code here:
+        
+        long itemID = 0;
+        int quantity = 0;
+        
+        OrderPosition orderPosition = null;
+
+        
+        if (table.getSelectionModel().isSelectionEmpty()) {
+
+        } else {
+            int row = table.getSelectedRow();
+            int column = 0;
+            itemID = Long.parseLong((String) table.getValueAt(row, column));
+        }
+
+        
+        if (quantityInput.getText().length() != 0) {
+            try {
+                int buf = Integer.parseInt(quantityInput.getText());
+                
+                if (buf >= 0) {
+                    quantity = buf;
+                    quantityInput.setText("");
+
+                } else {
+                    WrongInputForm.wrongInputMassage = "Quantity can't be 0 or less. Check input";
+                    new WrongInputForm().setVisible(true);
+                }
+                
+            } catch (Exception e) {
+                WrongInputForm.wrongInputMassage = "Quantity must be an uninterrupted sequence of numbers. Check input";
+                new WrongInputForm().setVisible(true);
+            }
+            
+        } else {
+            WrongInputForm.wrongInputMassage = "Quantity can't be empty. Check input";
+            new WrongInputForm().setVisible(true);
+        }
+        
+        
+        if (itemID != 0 && quantity != 0) {
+            try {
+                orderPosition = new OrderPosition(itemID, quantity);
+            } catch (Exception ex) {
+                Logger.getLogger(CreateOrderForm.class.getName()).log(Level.SEVERE, null, ex);
+                WrongInputForm.wrongInputMassage = "Failed to add this Item ID" + itemID;
+                new WrongInputForm().setVisible(true);
+            }
+        }
+        
+        
+        if (orderPosition != null) {
+            orderPositionMap.put(itemID, orderPosition);
+        }
+          
+    }//GEN-LAST:event_newAddItemsBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -292,6 +438,11 @@ public class CreateOrderForm extends javax.swing.JFrame {
     private javax.swing.JTextField discountInput;
     private javax.swing.JButton enterBtn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton newAddItemsBtn;
+    private javax.swing.JTextField quantityInput;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

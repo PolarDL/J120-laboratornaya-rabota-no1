@@ -34,7 +34,7 @@ public class ShowPriceListForm extends javax.swing.JFrame {
         table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
         
         
-        HashMap<Long, Item> initial = getItemListMap();
+        HashMap<Long, Item> initial = MainForm.itemListMap;
         
         TreeMap<Long, Item> sorted = new TreeMap<>();
         sorted.putAll(initial);

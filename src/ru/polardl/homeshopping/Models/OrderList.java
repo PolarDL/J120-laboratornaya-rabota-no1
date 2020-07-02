@@ -5,6 +5,8 @@ import ru.polardl.homeshopping.IO.OrderIO;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OrderList implements Serializable {
 
@@ -51,24 +53,33 @@ public class OrderList implements Serializable {
 
     //a method to change Order in orderList. Change Order State
     public void changeOrderState(int orderID, OrderState orderState) {
-        Order bufOrder = this.orderListMap.remove(orderID);
-        bufOrder.setOrderState(orderState);
-        this.addToOrderList(bufOrder);
+        
+        if (this.orderListMap.get(orderID).getOrderState().equals(OrderState.INPROGRESS)) {
+            
+            Order bufOrder = this.orderListMap.remove(orderID);
+            bufOrder.setOrderState(orderState);
+            this.addToOrderList(bufOrder);
 
-        if (this.orderListMap.get(orderID).getOrderState().equals(OrderState.SHIPPED)) {
-            for (HashMap.Entry<Long, OrderPosition> entry : this.orderListMap.get(orderID).getOrderPositionMap().entrySet()) {
-                int leftoverBeforeShipping = entry.getValue().getOrderPosItem().getLeftover();
-                int itemsToBeShipped = entry.getValue().getOrderPosItemQuantity();
-                entry.getValue().getOrderPosItem().setLeftover(leftoverBeforeShipping - itemsToBeShipped);
-                ItemList.putItemInItemListMap(entry.getValue().getOrderPosItem());
+            if (this.orderListMap.get(orderID).getOrderState().equals(OrderState.SHIPPED)) {
+                for (HashMap.Entry<Long, OrderPosition> entry : this.orderListMap.get(orderID).getOrderPositionMap().entrySet()) {
+                    int leftoverBeforeShipping = entry.getValue().getOrderPosItem().getLeftover();
+                    int itemsToBeShipped = entry.getValue().getOrderPosItemQuantity();
+                    entry.getValue().getOrderPosItem().setLeftover(leftoverBeforeShipping - itemsToBeShipped);
+                    ItemList.putItemInItemListMap(entry.getValue().getOrderPosItem());
+                }
+
+                //write leftover to a file
+                ItemIO.setItemIO(ItemList.getItemListMap());
+
+                //rewrite order to order list when shipped to update info about leftover in order list
+//                Order bufOrder1 = this.orderListMap.remove(orderID);
+//                bufOrder1.setOrderState(orderState);
+//                this.addToOrderList(bufOrder1);
             }
-            //write leftover to a file
-            ItemIO.setItemIO(ItemList.getItemListMap());
-
-            //rewrite order to order list when shipped to update info about leftover in order list
-            Order bufOrder1 = this.orderListMap.remove(orderID);
-            bufOrder1.setOrderState(orderState);
-            this.addToOrderList(bufOrder1);
+            
+            
+        } else {
+            //to wright smth?
         }
     }
 
@@ -86,7 +97,7 @@ public class OrderList implements Serializable {
 
             OrderIO.setOrderIO(this.orderListMap);
         } else {
-            System.out.println("Order state is not \"in progress\". Forbidden to delete order position from order.");
+            System.out.println("Order state is not \"in progress\". Forbidden to delete items (aka order position) from order.");
         }
     }
 
@@ -121,7 +132,35 @@ public class OrderList implements Serializable {
         }
     }
 
-
+    public void addOrderPosToOrder (int orderID, long orderPosItemID, int orderPosItemQuantity) {
+        if (this.orderListMap.get(orderID).getOrderState().equals(OrderState.INPROGRESS)) {
+            
+            double beforeOrderTotalPrice = this.orderListMap.get(orderID).getOrderTotalPrice();
+            int discount = this.orderListMap.get(orderID).getDiscount();
+            
+            OrderPosition orderPosition = null;
+            try {
+                orderPosition = new OrderPosition(orderPosItemID, orderPosItemQuantity);
+            } catch (Exception ex) {
+                Logger.getLogger(OrderList.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            if (orderPosition != null) {
+                this.orderListMap.get(orderID).getOrderPositionMap().put(orderPosItemID, orderPosition);
+                double orderPosPrice = orderPosition.getOrderPosTotalPrice() * (100 - discount) / 100.0;
+                double newOrderTotalPrice = beforeOrderTotalPrice + orderPosPrice;
+                newOrderTotalPrice = Math.round(newOrderTotalPrice * 100) / 100.0;
+                
+                this.orderListMap.get(orderID).setOrderTotalPrice(newOrderTotalPrice);
+                OrderIO.setOrderIO(this.orderListMap);
+            }
+            
+        } else {
+            System.out.println("Order state is not \"in progress\". Forbidden to add items (aka order position) in order.");
+        }
+    }
+    
     public static int getLastOrderID() {
         return lastOrderID;
     }

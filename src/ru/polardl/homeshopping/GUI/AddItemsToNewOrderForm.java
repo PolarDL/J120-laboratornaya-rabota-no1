@@ -12,16 +12,18 @@ import ru.polardl.homeshopping.Models.OrderPosition;
 
 public class AddItemsToNewOrderForm extends javax.swing.JFrame {
     
-    static HashMap<Long, OrderPosition> orderPositionMap;
+    static HashMap<Long, OrderPosition> orderPositionMap = new HashMap();
 
     /**
      * Creates new form AddItemsToNewOrderForm
      */
     public AddItemsToNewOrderForm() {
+//        setUndecorated(true);
         initComponents();
         setTitle("Adding Items to the Order");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
+        
         
         
         
@@ -47,28 +49,38 @@ public class AddItemsToNewOrderForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        itemIDJL = new javax.swing.JLabel();
         quantityJL = new javax.swing.JLabel();
-        itemIDInput = new javax.swing.JTextField();
-        quantityInput = new javax.swing.JTextField();
-        ReturnToCreatingOrderBtn = new javax.swing.JButton();
-        addItemBtn = new javax.swing.JButton();
+        itemIDJL = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        ReturnToCreatingOrderBtn = new javax.swing.JButton();
+        quantityInput = new javax.swing.JTextField();
+        itemIDInput = new javax.swing.JTextField();
+        addItemBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        itemIDJL.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        itemIDJL.setText("Item ID");
+        setAlwaysOnTop(true);
+        setBounds(new java.awt.Rectangle(0, 0, 0, 0));
 
         quantityJL.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         quantityJL.setText("Quantity");
 
-        itemIDInput.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        itemIDJL.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        itemIDJL.setText("Item ID");
 
-        quantityInput.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setText("When finished adding all Items press:");
 
         ReturnToCreatingOrderBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         ReturnToCreatingOrderBtn.setText("Return to creating Order");
+        ReturnToCreatingOrderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReturnToCreatingOrderBtnActionPerformed(evt);
+            }
+        });
+
+        quantityInput.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        itemIDInput.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         addItemBtn.setText("Add Item");
         addItemBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -77,66 +89,62 @@ public class AddItemsToNewOrderForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel1.setText("When finished adding all Items press:");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(22, 22, 22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(ReturnToCreatingOrderBtn)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(itemIDJL, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(quantityJL))
-                                .addGap(27, 27, 27)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(itemIDInput, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                    .addComponent(quantityInput))
-                                .addGap(18, 18, 18)
-                                .addComponent(addItemBtn))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(itemIDJL, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(quantityJL))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(itemIDInput)
+                            .addComponent(quantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addItemBtn))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(jLabel1)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(ReturnToCreatingOrderBtn)))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(itemIDJL)
                             .addComponent(itemIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(26, 26, 26)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(quantityJL)
-                            .addComponent(quantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(addItemBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ReturnToCreatingOrderBtn)
-                .addContainerGap(30, Short.MAX_VALUE))
+                            .addComponent(quantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addItemBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(ReturnToCreatingOrderBtn))
+                .addGap(67, 67, 67))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -209,16 +217,26 @@ public class AddItemsToNewOrderForm extends javax.swing.JFrame {
 //        }
 
 
-        System.out.println(itemID);
-        System.out.println(orderPosition);
+//        System.out.println(itemID);
+//        System.out.println(orderPosition);
+        
         
         
         if (itemID != 0 && orderPosition != null) {
            orderPositionMap.put(itemID, orderPosition);
         }
         
+        itemIDInput.setText("");
+        quantityInput.setText("");
+        
         
     }//GEN-LAST:event_addItemBtnActionPerformed
+
+    private void ReturnToCreatingOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnToCreatingOrderBtnActionPerformed
+        // TODO add your handling code here:
+        CreateOrderForm.orderPositionMap.putAll(orderPositionMap);
+        dispose();
+    }//GEN-LAST:event_ReturnToCreatingOrderBtnActionPerformed
 
     /**
      * @param args the command line arguments

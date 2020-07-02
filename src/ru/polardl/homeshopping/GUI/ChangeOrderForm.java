@@ -1,17 +1,36 @@
 package ru.polardl.homeshopping.GUI;
 
 import javax.swing.JFrame;
+import ru.polardl.homeshopping.Models.Order;
+import ru.polardl.homeshopping.Models.OrderState;
 
 public class ChangeOrderForm extends javax.swing.JFrame {
+    
+    private int discount;
+    private OrderState orderState;
+    private long itemIDToDelete;
+    private long itemIDToAdd;
+    private long itemIDToChangeQuantity;
+    private int newItemQuantity;
+    private int addItemQuantity;
+    
+    private int orderID = ShowOrdersForm.orderIDSelected;
+    
+    private Order order = MainForm.orderList.getOrderListMap().get(orderID);
 
     /**
      * Creates new form ChangeOrderForm
      */
     public ChangeOrderForm() {
+        
         initComponents();
         setTitle("Changing Order");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        
+        orderIDOutput.setText(String.valueOf(orderID));
+        
+        combobox.setSelectedItem(null);
     }
 
     /**
@@ -29,11 +48,10 @@ public class ChangeOrderForm extends javax.swing.JFrame {
         setOrderState = new javax.swing.JLabel();
         deleteItem = new javax.swing.JLabel();
         changeItem = new javax.swing.JLabel();
-        itemNumberToChangeInput = new javax.swing.JTextField();
+        itemIDToChangeQuantityInput = new javax.swing.JTextField();
         itemNewQuantity = new javax.swing.JLabel();
         itemNewQuantityInput = new javax.swing.JTextField();
         discountInput = new javax.swing.JTextField();
-        orderStateInput = new javax.swing.JTextField();
         itemToDeleteIDInput = new javax.swing.JTextField();
         setDiscountBtn = new javax.swing.JButton();
         setOrderStateBtn = new javax.swing.JButton();
@@ -42,6 +60,12 @@ public class ChangeOrderForm extends javax.swing.JFrame {
         deleteOrder = new javax.swing.JLabel();
         deleteOrderBtn = new javax.swing.JButton();
         orderIDOutput = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        addItemIDInput = new javax.swing.JTextField();
+        addItemQuantityInput = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        addItemBtn = new javax.swing.JButton();
+        combobox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,19 +88,66 @@ public class ChangeOrderForm extends javax.swing.JFrame {
         itemNewQuantity.setText("quantity to");
 
         setDiscountBtn.setText("OK");
+        setDiscountBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setDiscountBtnActionPerformed(evt);
+            }
+        });
 
         setOrderStateBtn.setText("OK");
+        setOrderStateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setOrderStateBtnActionPerformed(evt);
+            }
+        });
 
         deleteItemBtn.setText("OK");
+        deleteItemBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteItemBtnActionPerformed(evt);
+            }
+        });
 
         changeItemQuantityBtn.setText("OK");
+        changeItemQuantityBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeItemQuantityBtnActionPerformed(evt);
+            }
+        });
 
-        deleteOrder.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        deleteOrder.setText("delete Order");
+        deleteOrder.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        deleteOrder.setText("delete this Order");
 
         deleteOrderBtn.setText("OK");
+        deleteOrderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteOrderBtnActionPerformed(evt);
+            }
+        });
 
         orderIDOutput.setEditable(false);
+        orderIDOutput.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        orderIDOutput.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setText("add Item #");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setText("quantity");
+
+        addItemBtn.setText("OK");
+        addItemBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addItemBtnActionPerformed(evt);
+            }
+        });
+
+        combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SHIPPED", "CANCELLED" }));
+        combobox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboboxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -86,45 +157,62 @@ public class ChangeOrderForm extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(deleteOrder)
-                            .addGap(151, 151, 151)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(deleteOrderBtn))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(setOrderState)
                                 .addComponent(setDiscount)
-                                .addComponent(deleteItem))
-                            .addGap(18, 18, 18)
+                                .addComponent(deleteItem)
+                                .addComponent(jLabel1))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(itemToDeleteIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(deleteItemBtn))
+                                    .addGap(38, 38, 38)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(discountInput, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                        .addComponent(combobox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(setOrderStateBtn)
+                                        .addComponent(setDiscountBtn)))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(discountInput, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(orderStateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(setOrderStateBtn, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(setDiscountBtn, javax.swing.GroupLayout.Alignment.TRAILING)))))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(changeItem)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(itemNumberToChangeInput, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGap(4, 4, 4)
+                                    .addComponent(itemToDeleteIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(deleteItemBtn))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(addItemIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(addItemQuantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(addItemBtn))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                             .addComponent(itemNewQuantity)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(itemNewQuantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(changeItemQuantityBtn)))
+                            .addGap(18, 18, 18)
+                            .addComponent(itemNewQuantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(changeItemQuantityBtn))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(changeItem)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(itemIDToChangeQuantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(0, 0, Short.MAX_VALUE)
+                                    .addComponent(jLabel2)
+                                    .addGap(46, 46, 46)))
+                            .addGap(57, 57, 57)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(changeOrder)
                         .addGap(18, 18, 18)
                         .addComponent(orderIDOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,25 +229,41 @@ public class ChangeOrderForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(setOrderState)
-                    .addComponent(orderStateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(setOrderStateBtn))
+                    .addComponent(setOrderStateBtn)
+                    .addComponent(combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(addItemIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addItemQuantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(0, 1, Short.MAX_VALUE))
+                    .addComponent(addItemBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(changeItem)
+                            .addComponent(itemIDToChangeQuantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(itemNewQuantity)
+                            .addComponent(itemNewQuantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(changeItemQuantityBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(deleteItem)
                     .addComponent(itemToDeleteIDInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteItemBtn))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(changeItem)
-                    .addComponent(itemNumberToChangeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(itemNewQuantity)
-                    .addComponent(itemNewQuantityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(changeItemQuantityBtn))
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(deleteOrder)
                     .addComponent(deleteOrderBtn))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addGap(58, 58, 58))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -170,11 +274,225 @@ public class ChangeOrderForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void setDiscountBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setDiscountBtnActionPerformed
+        // TODO add your handling code here:
+        
+        if (discountInput.getText().length() != 0) {
+            try {
+                discount = Integer.parseInt(discountInput.getText());
+                
+                if (discount <= 0) {
+                    WrongInputForm.wrongInputMassage = "No sense in 0 or less Discount. Check input";
+                    new WrongInputForm().setVisible(true);
+                    
+                }else {
+                    MainForm.orderList.changeOrderDiscount(orderID, discount);
+                    dispose();
+                    
+                }
+            } catch (Exception e) {
+                WrongInputForm.wrongInputMassage = "Discount must be an uninterrupted sequence of numbers. Check input";
+                new WrongInputForm().setVisible(true);
+                
+            }
+        } else {
+            WrongInputForm.wrongInputMassage = "Discount input field is emty. Check input";
+            new WrongInputForm().setVisible(true);
+        }
+        
+    }//GEN-LAST:event_setDiscountBtnActionPerformed
+
+    private void changeItemQuantityBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeItemQuantityBtnActionPerformed
+        // TODO add your handling code here:
+        
+        if (itemIDToChangeQuantityInput.getText().length() != 0 && itemNewQuantityInput.getText().length() != 0) {
+            
+            //first let us deal with Item #
+            try {
+                itemIDToChangeQuantity = Long.parseLong(itemIDToChangeQuantityInput.getText());
+                
+                if (itemIDToChangeQuantity <= 0) {
+                    WrongInputForm.wrongInputMassage = "Item # can't be 0 or less. Check input";
+                    new WrongInputForm().setVisible(true); 
+                    
+                } else {
+                    //check if this item is in order. Use orderPositionMap
+                    if (order.getOrderPositionMap().containsKey(itemIDToChangeQuantity)) {
+                        
+                        //now let's deal with Quantity
+                        try {
+                            newItemQuantity = Integer.parseInt(itemNewQuantityInput.getText());
+                            
+                            if (newItemQuantity <= 0) {
+                                WrongInputForm.wrongInputMassage = "Quantity can't be 0 or less. Check input";
+                                new WrongInputForm().setVisible(true);
+                                
+                            } else if(newItemQuantity > MainForm.itemListMap.get(itemIDToChangeQuantity).getLeftover()) {
+                                WrongInputForm.wrongInputMassage = "Leftover is not enough. Reduce Quantity";
+                                new WrongInputForm().setVisible(true);
+                                
+                            } else {
+                                MainForm.orderList.changeOrderPosItemQuantityInOrder(orderID, itemIDToChangeQuantity, newItemQuantity);
+                                dispose();
+                                
+                            }
+                            
+                        } catch (Exception e) {
+                            WrongInputForm.wrongInputMassage = "Quantity must be an uninterrupted sequence of numbers. Check input";
+                            new WrongInputForm().setVisible(true);
+                        }
+                        
+                    } else {
+                        WrongInputForm.wrongInputMassage = "No Item # " + itemIDToChangeQuantity + " in Order # " 
+                                + orderID + " . Check input";
+                        new WrongInputForm().setVisible(true); 
+                    }
+                    
+                }
+                
+            } catch (Exception e) {
+                WrongInputForm.wrongInputMassage = "Item # must be an uninterrupted sequence of numbers. Check input";
+                new WrongInputForm().setVisible(true);
+            }
+            
+        } else {
+            WrongInputForm.wrongInputMassage = "\"Change Item #\" and/or \"quantity to\" input fields are emty. Check input";
+            new WrongInputForm().setVisible(true);
+        }
+        
+    }//GEN-LAST:event_changeItemQuantityBtnActionPerformed
+
+    private void deleteItemBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteItemBtnActionPerformed
+        // TODO add your handling code here:
+        
+        if (itemToDeleteIDInput.getText().length() != 0) {
+            
+            try {
+                itemIDToDelete = Long.parseLong(itemToDeleteIDInput.getText());
+                
+                if (itemIDToDelete <= 0) {
+                    WrongInputForm.wrongInputMassage = "Item # can't be 0 or less. Check input";
+                    new WrongInputForm().setVisible(true); 
+                    
+                } else {
+                    //check if this item is in Order. Use orderPositionMap
+                    if (order.getOrderPositionMap().containsKey(itemIDToDelete)) {
+                        
+                        MainForm.orderList.deleteOrderPosFromOrder(orderID, itemIDToDelete);
+                        dispose();
+                        
+                    } else {
+                        WrongInputForm.wrongInputMassage = "No Item # " + itemIDToDelete + " in Order # " 
+                                + orderID + " . Check input";
+                        new WrongInputForm().setVisible(true); 
+                    } 
+                }
+                
+            } catch (Exception e) {
+                WrongInputForm.wrongInputMassage = "Item # must be an uninterrupted sequence of numbers. Check input";
+                new WrongInputForm().setVisible(true);
+            }
+            
+        } else {
+            WrongInputForm.wrongInputMassage = "\"delete Item #\" input field is emty. Check input";
+            new WrongInputForm().setVisible(true);
+        }
+        
+    }//GEN-LAST:event_deleteItemBtnActionPerformed
+
+    private void addItemBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBtnActionPerformed
+        // TODO add your handling code here:
+        
+        if (addItemIDInput.getText().length() != 0 && addItemQuantityInput.getText().length() != 0) {
+            
+            //first let us deal with Item #
+            try {
+                itemIDToAdd = Long.parseLong(addItemIDInput.getText());
+                
+                if (itemIDToAdd <= 0) {
+                    WrongInputForm.wrongInputMassage = "Item # can't be 0 or less. Check input";
+                    new WrongInputForm().setVisible(true); 
+                    
+                } else {
+                    //check if this item is in ItemList
+                    if (MainForm.itemListMap.containsKey(itemIDToAdd)) {
+                        
+                        //now let's deal with Quantity
+                        try {
+                            addItemQuantity = Integer.parseInt(addItemQuantityInput.getText());
+                            
+                            if (addItemQuantity <= 0) {
+                                WrongInputForm.wrongInputMassage = "Quantity can't be 0 or less. Check input";
+                                new WrongInputForm().setVisible(true);
+                                
+                            } else if(addItemQuantity > MainForm.itemListMap.get(itemIDToAdd).getLeftover()) {
+                                WrongInputForm.wrongInputMassage = "Leftover is not enough. Reduce Quantity";
+                                new WrongInputForm().setVisible(true);
+                                
+                            } else {
+                                MainForm.orderList.addOrderPosToOrder(orderID, itemIDToAdd, addItemQuantity);
+                                dispose();
+                                
+                            }
+                            
+                        } catch (Exception e) {
+                            WrongInputForm.wrongInputMassage = "Quantity must be an uninterrupted sequence of numbers. Check input";
+                            new WrongInputForm().setVisible(true);
+                        }
+                        
+                    } else {
+                        WrongInputForm.wrongInputMassage = "No Item # " + itemIDToAdd + " in Price List. Check input";
+                        new WrongInputForm().setVisible(true); 
+                    }
+                    
+                }
+                
+            } catch (Exception e) {
+                WrongInputForm.wrongInputMassage = "Item # must be an uninterrupted sequence of numbers. Check input";
+                new WrongInputForm().setVisible(true);
+            }
+            
+        } else {
+            WrongInputForm.wrongInputMassage = "\"Change Item #\" and/or \"quantity to\" input fields are emty. Check input";
+            new WrongInputForm().setVisible(true);
+        }
+        
+    }//GEN-LAST:event_addItemBtnActionPerformed
+
+    private void deleteOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteOrderBtnActionPerformed
+        // TODO add your handling code here:
+        
+        MainForm.orderList.deleteOrder(orderID);
+        dispose();
+        
+    }//GEN-LAST:event_deleteOrderBtnActionPerformed
+
+    private void comboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboboxActionPerformed
+
+    private void setOrderStateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setOrderStateBtnActionPerformed
+        // TODO add your handling code here:
+        String stateString = (String) combobox.getSelectedItem();
+        orderState = OrderState.valueOf(stateString);
+        
+        MainForm.orderList.changeOrderState(orderID, orderState);
+        
+        //at least to change leftover in ItemList and file. Change set leftover method to take as an input quantity and not leftover
+       
+        
+        dispose();
+        
+        
+    }//GEN-LAST:event_setOrderStateBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,21 +530,26 @@ public class ChangeOrderForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addItemBtn;
+    private javax.swing.JTextField addItemIDInput;
+    private javax.swing.JTextField addItemQuantityInput;
     private javax.swing.JLabel changeItem;
     private javax.swing.JButton changeItemQuantityBtn;
     private javax.swing.JLabel changeOrder;
+    private javax.swing.JComboBox<String> combobox;
     private javax.swing.JLabel deleteItem;
     private javax.swing.JButton deleteItemBtn;
     private javax.swing.JLabel deleteOrder;
     private javax.swing.JButton deleteOrderBtn;
     private javax.swing.JTextField discountInput;
+    private javax.swing.JTextField itemIDToChangeQuantityInput;
     private javax.swing.JLabel itemNewQuantity;
     private javax.swing.JTextField itemNewQuantityInput;
-    private javax.swing.JTextField itemNumberToChangeInput;
     private javax.swing.JTextField itemToDeleteIDInput;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField orderIDOutput;
-    private javax.swing.JTextField orderStateInput;
     private javax.swing.JLabel setDiscount;
     private javax.swing.JButton setDiscountBtn;
     private javax.swing.JLabel setOrderState;

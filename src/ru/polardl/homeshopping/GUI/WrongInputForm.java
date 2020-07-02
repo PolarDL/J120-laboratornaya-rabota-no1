@@ -31,6 +31,7 @@ public class WrongInputForm extends javax.swing.JFrame {
         massageOut = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
 
         massageOut.setEditable(false);
         massageOut.setBackground(new java.awt.Color(255, 51, 51));
