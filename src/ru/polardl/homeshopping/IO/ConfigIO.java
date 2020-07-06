@@ -5,7 +5,7 @@ import java.util.Properties;
 
 public class ConfigIO {
 
-    public static Properties getConfigIO() {                 //maybe void?
+    public static Properties getConfigIO() {
         Properties properties = new Properties();
         try (FileReader fileReader = new FileReader("config.properties");
              BufferedReader bufferedReader = new BufferedReader(fileReader)) {
@@ -13,8 +13,6 @@ public class ConfigIO {
         } catch (IOException e) {
             System.out.println("Path is invalid or file \"config.properties\" doesn't exist.");
         }
-        return properties;                                  //if not void
-
-        //maybe here properties should be transferred to config instance? and the method should be void?
+        return properties;
     }
 }

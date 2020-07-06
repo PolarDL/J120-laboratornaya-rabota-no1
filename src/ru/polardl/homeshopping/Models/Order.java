@@ -1,10 +1,9 @@
 package ru.polardl.homeshopping.Models;
 
-import ru.polardl.homeshopping.IO.ConfigIO;
-
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Order implements Serializable {
 
@@ -12,33 +11,36 @@ public class Order implements Serializable {
     private Client client;
     private int discount;               //not obligatory to fill in
     private OrderState orderState;
-    private Set<OrderPositions> orderPositionsSet;
-    private static int ordersTotalQuantity = 0;
+    private HashMap<Long, OrderPosition> orderPositionMap;
     private int orderID;
     private double orderTotalPrice;
 
-    public Order(LocalDate orderDate, Client client, Set<OrderPositions> orderPositionsSet) {
+    public Order(LocalDate orderDate, Client client, HashMap<Long, OrderPosition> orderPositionMap) {
         this.orderDate = orderDate;
         this.client = client;
         this.orderState = OrderState.INPROGRESS;        //when new Order is created its OrderState is always INPROGRESS
-        this.orderPositionsSet = orderPositionsSet;
+        this.orderPositionMap = orderPositionMap;
         this.discount = 0;
-        this.orderID = ++ordersTotalQuantity;
+
+        this.orderID = OrderList.getLastOrderID() + 1;
+        OrderList.setLastOrderID(this.orderID);
+
         double bufPrice = 0;
-        for (OrderPositions bufPositions : orderPositionsSet) {
-            bufPrice += bufPositions.getOrderPosTotalPrice();
+        for (Map.Entry<Long, OrderPosition> entry : orderPositionMap.entrySet()) {
+            bufPrice += entry.getValue().getOrderPosTotalPrice();
         }
-        this.orderTotalPrice = bufPrice;
+        this.orderTotalPrice = Math.round(bufPrice * 100) / 100.0;
     }
 
-    public Order(LocalDate orderDate, Client client, int discount, Set<OrderPositions> orderPositionsSet) {
-        this(orderDate, client, orderPositionsSet);
-        this.discount = Math.min(discount, Integer.parseInt(ConfigIO.getConfigIO().getProperty("maxDiscount", "0")));
+    public Order(LocalDate orderDate, Client client, int discount, HashMap<Long, OrderPosition> orderPositionMap) {
+        this(orderDate, client, orderPositionMap);
+        this.discount = Math.min(discount, Integer.parseInt(Config.getConfigProperties().getProperty("maxDiscount", "0")));
+
         double bufPrice = 0;
-        for (OrderPositions bufPositions : orderPositionsSet) {
-            bufPrice += bufPositions.getOrderPosTotalPrice();
+        for (Map.Entry<Long, OrderPosition> entry : orderPositionMap.entrySet()) {
+            bufPrice += entry.getValue().getOrderPosTotalPrice();
         }
-        this.orderTotalPrice = bufPrice * (100 - this.discount) / 100;
+        this.orderTotalPrice = Math.round(bufPrice * (100 - this.discount)) / 100.0;
     }
 
     public LocalDate getOrderDate() {
@@ -57,12 +59,8 @@ public class Order implements Serializable {
         return orderState;
     }
 
-    public Set<OrderPositions> getOrderPositionsSet() {
-        return orderPositionsSet;
-    }
-
-    public static int getOrdersTotalQuantity() {
-        return ordersTotalQuantity;
+    public HashMap<Long, OrderPosition> getOrderPositionMap() {
+        return orderPositionMap;
     }
 
     public int getOrderID() {
@@ -74,36 +72,52 @@ public class Order implements Serializable {
     }
 
     public void setDiscount(int discount) {
+        double bufOrderTotalPrice = this.orderTotalPrice / (100 - this.getDiscount()) * 100.0;
+
         if (this.orderState == OrderState.INPROGRESS) {
-            this.discount = Math.min(discount, Integer.parseInt(ConfigIO.getConfigIO().getProperty("maxDiscount", "0")));
+            this.discount = Math.min(discount, Integer.parseInt(Config.getConfigProperties().getProperty("maxDiscount", "0")));
         } else {
             System.out.println("Order state is not \"in progress\". Forbidden to change discount.");
         }
+
+        this.orderTotalPrice = Math.round(bufOrderTotalPrice * (100 - this.discount)) / 100.0;
     }
 
     public void setOrderState(OrderState orderState) {
-        this.orderState = orderState;
+        if (this.orderState == OrderState.INPROGRESS) {
+            this.orderState = orderState;
+        } else {
+            System.out.println("Order state is not \"in progress\". Forbidden to change order state.");
+        }
     }
 
-    public void setOrderPositionsSet(Set<OrderPositions> orderPositionsSet) {
+    public void setOrderPositionMap(HashMap<Long, OrderPosition> orderPositionMap) {
         if (this.orderState == OrderState.INPROGRESS) {
-            this.orderPositionsSet = orderPositionsSet;
+            this.orderPositionMap = orderPositionMap;
         } else {
             System.out.println("Order state is not \"in progress\". Forbidden to change order positions.");
+        }
+    }
+
+    public void setOrderTotalPrice(double orderTotalPrice) {
+        if (this.orderState == OrderState.INPROGRESS) {
+            this.orderTotalPrice = orderTotalPrice;
+        } else {
+            System.out.println("Order state is not \"in progress\". Forbidden to change order total price.");
         }
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "orderDate=" + orderDate +
-                ", client=" + client +
-                ", discount=" + discount +
-                ", orderState=" + orderState +
-                ", orderPositionsSet=" + orderPositionsSet +
-                ", orderID=" + orderID +
-                ", orderTotalPrice=" + orderTotalPrice +
-                '}';
+                "\n   orderDate=" + orderDate +
+                ", \n   client=" + client +
+                ", \n   discount=" + discount +
+                ", \n   orderState=" + orderState +
+                ", \n   orderPositionMap=" + orderPositionMap +
+                ", \n   orderID=" + orderID +
+                ", \n   orderTotalPrice=" + orderTotalPrice +
+                '}' +"\n";
     }
 
     @Override
